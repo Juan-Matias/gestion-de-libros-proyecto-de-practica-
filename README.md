@@ -52,7 +52,6 @@ src/
 ## Diagrama de clases
 ![diagrama_de_clases.jpg](doc/diagrama_de_clases.jpg)
 
-
-
-Autor : Matias Ponce
-Casi todo los derechos reservados
+> [!NOTE]
+> Autor : Matias Ponce
+> Casi todo los derechos reservados
