@@ -10,37 +10,31 @@ public class Pagina implements IPagina {
 
     // Constructores
     public Pagina() {
-        this.numero = 0;
-        this.contenido = "";
+        this(0, "");
     }
 
     public Pagina(int numero, String contenido) {
         this.numero = numero;
-        this.contenido = contenido;
+        this.contenido = (contenido != null) ? contenido : "";
     }
 
-    // Métodos
+    // Métodos de la interfaz
     @Override
     public int obtenerCantidadCaracteres() {
-        // Si contenido es null o vacío, devolvemos 0
         if (contenido == null || contenido.isBlank()) return 0;
-
-        // Eliminamos todos los espacios antes de contar
-        return contenido.replace(" ", "").length();
+        // Contar caracteres sin espacios
+        return contenido.replaceAll("\\s+", "").length();
     }
 
     @Override
     public int obtenerCantidadPalabras() {
         if (contenido == null || contenido.isBlank()) return 0;
-
-        // Dividimos la cadena por cualquier espacio, punto o coma
+        // Dividimos la cadena por espacios, puntos o comas
         String[] palabras = contenido.trim().split("[\\s.,]+");
         return palabras.length;
     }
 
-
     // Propiedades
-
     public int getNumero() {
         return numero;
     }
@@ -54,12 +48,11 @@ public class Pagina implements IPagina {
     }
 
     public void setContenido(String contenido) {
-        this.contenido = contenido;
+        this.contenido = (contenido != null) ? contenido : "";
     }
 
-    // Zona de Mensajes
-    @Override
-    public String toString() {
+    // Zona de mensajes
+    public String obtenerDatos() {
         StringBuilder sb = new StringBuilder();
         sb.append("=== PÁGINA ===\n");
         sb.append("Número: ").append(numero).append("\n");
@@ -69,4 +62,8 @@ public class Pagina implements IPagina {
         return sb.toString();
     }
 
+    @Override
+    public String toString() {
+        return obtenerDatos();
+    }
 }

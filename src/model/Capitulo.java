@@ -1,69 +1,76 @@
 package model;
 
 import interfaces.ICapitulo;
-
 import java.util.ArrayList;
+import java.util.List;
 
 public class Capitulo implements ICapitulo {
+
     // Atributos
     private int numero;
     private String nombre;
-    private ArrayList<Pagina> pagina;
+    private List<Pagina> listaPaginas;
 
     // Constructores
     public Capitulo() {
-        this.numero = 0;
-        this.nombre = "";
-        this.pagina = new ArrayList<>();
+        this(0, "", new ArrayList<>());
     }
 
-    public Capitulo(int numero, String nombre, ArrayList<Pagina> pagina) {
+    public Capitulo(int numero, String nombre, List<Pagina> listaPaginas) {
         this.numero = numero;
-        this.nombre = nombre;
-        this.pagina = pagina;
+        this.nombre = (nombre != null) ? nombre : "";
+        this.listaPaginas = (listaPaginas != null) ? listaPaginas : new ArrayList<>();
     }
 
-    // Metodos
+    // Métodos
     @Override
     public boolean agregarPagina(Pagina unaPagina) {
-        // Validamos null primero
         if (unaPagina == null) return false;
 
-        // Evitamos duplicados
-        for (Pagina p : pagina) {
-            if (p.getNumero() == unaPagina.getNumero()) {
-                return false;
-            }
+        // Evitar duplicados por número
+        for (Pagina p : listaPaginas) {
+            if (p.getNumero() == unaPagina.getNumero()) return false;
         }
 
-        // Agregamos
-        this.pagina.add(unaPagina);
+        listaPaginas.add(unaPagina);
         return true;
     }
 
-
     @Override
     public int eliminarPagina(int numero) {
+        for (int i = 0; i < listaPaginas.size(); i++) {
+            if (listaPaginas.get(i).getNumero() == numero) {
+                listaPaginas.remove(i);
+                return 1;
+            }
+        }
         return 0;
     }
 
     @Override
     public int obtenerCantidadCaracteres() {
-        return 0;
+        int total = 0;
+        for (Pagina p : listaPaginas) {
+            total += p.obtenerCantidadCaracteres();
+        }
+        return total;
     }
 
     @Override
     public int obtenerCantidadPalabras() {
-        return 0;
+        int total = 0;
+        for (Pagina p : listaPaginas) {
+            total += p.obtenerCantidadPalabras();
+        }
+        return total;
     }
 
     @Override
     public int obtenerNroPaginas() {
-        return 0;
+        return listaPaginas.size();
     }
 
-    // Propiedades
-
+    // Getters y Setters
     public int getNumero() {
         return numero;
     }
@@ -77,14 +84,35 @@ public class Capitulo implements ICapitulo {
     }
 
     public void setNombre(String nombre) {
-        this.nombre = nombre;
+        this.nombre = (nombre != null) ? nombre : "";
     }
 
-    public ArrayList<Pagina> getPagina() {
-        return pagina;
+    public List<Pagina> getListaPaginas() {
+        return listaPaginas;
     }
 
-    public void setPagina(ArrayList<Pagina> pagina) {
-        this.pagina = pagina;
+    public void setListaPaginas(List<Pagina> listaPaginas) {
+        this.listaPaginas = (listaPaginas != null) ? listaPaginas : new ArrayList<>();
+    }
+
+    public String obtenerDatos() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("=== CAPÍTULO ===\n");
+        sb.append("Número: ").append(numero).append("\n");
+        sb.append("Nombre: ").append(nombre).append("\n");
+        sb.append("Total páginas: ").append(obtenerNroPaginas()).append("\n");
+        sb.append("Total caracteres: ").append(obtenerCantidadCaracteres()).append("\n");
+        sb.append("Total palabras: ").append(obtenerCantidadPalabras()).append("\n");
+
+        for (Pagina p : listaPaginas) {
+            sb.append(p.obtenerDatos()).append("\n");
+        }
+
+        return sb.toString();
+    }
+
+    @Override
+    public String toString() {
+        return obtenerDatos();
     }
 }
