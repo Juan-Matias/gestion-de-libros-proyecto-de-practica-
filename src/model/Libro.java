@@ -1,111 +1,66 @@
 package model;
 
-import interfaces.ILibro;
-
 import java.util.ArrayList;
+import java.util.List;
 
-public class Libro implements ILibro {
-    // Atributos
-    private Integer idLibro;
+public class Libro {
+    private int idLibro;
     private String titulo;
-    private ArrayList<Capitulo> listaCapitulo;
+    private List<Capitulo> listaCapitulo;
 
-    // Constructores
     public Libro() {
-        this.idLibro = 0;
-        this.titulo = "";
-        this.listaCapitulo = new ArrayList<>();
+        this(0, "", new ArrayList<>());
     }
 
-    public Libro(Integer idLibro, String titulo, ArrayList<Capitulo> listaCapitulo) {
+    public Libro(int idLibro, String titulo, List<Capitulo> listaCapitulo) {
         this.idLibro = idLibro;
-        this.titulo = titulo;
-        this.listaCapitulo = listaCapitulo;
+        this.titulo = (titulo != null) ? titulo : "";
+        this.listaCapitulo = (listaCapitulo != null) ? listaCapitulo : new ArrayList<>();
     }
 
-    // Metodos
-
-    @Override
-    public boolean agregarCapitulo(Capitulo uncapitulo) {
-//        validar entrada de capitulo
-//        if (uncapitulo == null) {
-//            return false;
-//        }
-        this.listaCapitulo.add(uncapitulo);
+    public boolean agregarCapitulo(Capitulo cap) {
+        if (cap == null) return false;
+        for (Capitulo c : listaCapitulo) {
+            if (c.getNumero() == cap.getNumero()) return false;
+        }
+        listaCapitulo.add(cap);
         return true;
     }
 
-    @Override
-    public int eliminarCapitulo(int numero) {
-//         Verificar que la lista no sea null
-//        if (this.listaCapitulo == null) {
-//            return 0; // No hay capítulos para eliminar
-//        }
-
-
-        for (int i = 0; i < listaCapitulo.size(); i++) {
-            if (listaCapitulo.get(i).getNumero() == numero) {
-                listaCapitulo.remove(i);
-                return 1; // Capítulo eliminado correctamente
-            }
-        }
-        return 0; // no se encontro el capitulo
+    public boolean eliminarCapitulo(int numero) {
+        return listaCapitulo.removeIf(c -> c.getNumero() == numero);
     }
 
-    @Override
-    public int obtenerCantidadCaracteresCapitulo(int numero) {
-        int totalCarecteresCapitulo = 0;
-        for (int i = 0; i < listaCapitulo.size(); i++) {
-            if (listaCapitulo.get(i).getNumero() == numero) {
-                totalCarecteresCapitulo++;
-            }
-        }
-        return totalCarecteresCapitulo;
-    }
-
-    @Override
-    public int obtenerCantidadPalabrasCapitulo(int numero) {
-        return 0;
-    }
-
-    @Override
     public int obtenerCantidadTotalCaracteres() {
-        return 0;
+        int total = 0;
+        for (Capitulo c : listaCapitulo) {
+            total += c.obtenerCantidadCaracteres();
+        }
+        return total;
     }
 
-    @Override
     public int obtenerCantidadTotalPalabras() {
-        return 0;
+        int total = 0;
+        for (Capitulo c : listaCapitulo) {
+            total += c.obtenerCantidadPalabras();
+        }
+        return total;
     }
 
     @Override
-    public int obtenerNroPaginas() {
-        return 0;
-    }
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append("📘 LIBRO\n")
+                .append("ID: ").append(idLibro).append("\n")
+                .append("Título: ").append(titulo).append("\n")
+                .append("Total capítulos: ").append(listaCapitulo.size()).append("\n")
+                .append("Total caracteres: ").append(obtenerCantidadTotalCaracteres()).append("\n")
+                .append("Total palabras: ").append(obtenerCantidadTotalPalabras()).append("\n\n");
 
-    // Propiedades
-    public Integer getIdLibro() {
-        return idLibro;
-    }
+        for (Capitulo c : listaCapitulo) {
+            sb.append(c).append("\n");
+        }
 
-    public void setIdLibro(Integer idLibro) {
-        this.idLibro = idLibro;
+        return sb.toString();
     }
-
-    public String getTitulo() {
-        return titulo;
-    }
-
-    public void setTitulo(String titulo) {
-        this.titulo = titulo;
-    }
-
-    public ArrayList<Capitulo> getListaCapitulo() {
-        return listaCapitulo;
-    }
-
-    public void setListaCapitulo(ArrayList<Capitulo> listaCapitulo) {
-        this.listaCapitulo = listaCapitulo;
-    }
-
 }

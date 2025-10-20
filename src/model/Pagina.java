@@ -1,69 +1,44 @@
 package model;
 
-import interfaces.IPagina;
-
-public class Pagina implements IPagina {
-
-    // Atributos
+public class Pagina {
     private int numero;
     private String contenido;
 
-    // Constructores
     public Pagina() {
         this(0, "");
     }
 
     public Pagina(int numero, String contenido) {
         this.numero = numero;
-        this.contenido = (contenido != null) ? contenido : "";
+        this.contenido = (contenido != null) ? contenido.trim() : "";
     }
 
-    // Métodos de la interfaz
-    @Override
     public int obtenerCantidadCaracteres() {
-        if (contenido == null || contenido.isBlank()) return 0;
-        // Contar caracteres sin espacios
-        return contenido.replaceAll("\\s+", "").length();
+        if (contenido == null || contenido.isEmpty()) return 0;
+        return contenido.replaceAll("\\s+", "").length(); // sin espacios
     }
 
-    @Override
     public int obtenerCantidadPalabras() {
         if (contenido == null || contenido.isBlank()) return 0;
-        // Dividimos la cadena por espacios, puntos o comas
-        String[] palabras = contenido.trim().split("[\\s.,]+");
-        return palabras.length;
+        return contenido.trim().split("\\s+").length;
     }
 
-    // Propiedades
     public int getNumero() {
         return numero;
-    }
-
-    public void setNumero(int numero) {
-        this.numero = numero;
     }
 
     public String getContenido() {
         return contenido;
     }
 
-    public void setContenido(String contenido) {
-        this.contenido = (contenido != null) ? contenido : "";
-    }
-
-    // Zona de mensajes
-    public String obtenerDatos() {
-        StringBuilder sb = new StringBuilder();
-        sb.append("=== PÁGINA ===\n");
-        sb.append("Número: ").append(numero).append("\n");
-        sb.append("Contenido: ").append(contenido).append("\n");
-        sb.append("Caracteres (sin espacios): ").append(obtenerCantidadCaracteres()).append("\n");
-        sb.append("Palabras: ").append(obtenerCantidadPalabras()).append("\n");
-        return sb.toString();
-    }
-
     @Override
     public String toString() {
-        return obtenerDatos();
+        return new StringBuilder()
+                .append("=== PÁGINA ===\n")
+                .append("Número: ").append(numero).append("\n")
+                .append("Contenido: ").append(contenido).append("\n")
+                .append("Caracteres (sin espacios): ").append(obtenerCantidadCaracteres()).append("\n")
+                .append("Palabras: ").append(obtenerCantidadPalabras()).append("\n")
+                .toString();
     }
 }
